@@ -6,6 +6,10 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 # 1. Preparación para Producción: Leemos de variables de entorno, o usamos SQLite por defecto
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./erp_epoxicas.db")
 
+# CORRECCIÓN PARA RENDER: SQLAlchemy requiere "postgresql://" en lugar de "postgres://"
+if SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
+    SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 # 2. Configuración del Motor
 # check_same_thread=False solo se inyecta si estamos usando SQLite
 connect_args = {"check_same_thread": False} if "sqlite" in SQLALCHEMY_DATABASE_URL else {}
